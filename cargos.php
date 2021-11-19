@@ -4,15 +4,11 @@
     $nombre = $_SESSION['nombre'];
     $tipoPermiso = $_SESSION['permiso'];
     if($_POST){
-    $nombre = $_POST['nombre'];
-    $correo = $_POST['correo'];
-    $contrasena =sha1($_POST['contrasena']);
-    $cargo = $_POST['cargo'];
-    $permiso = $_POST['permiso'];
-    $query = "INSERT INTO usuarios (nombre,correo,contrasena,cargo,tipoPermiso) VALUES ('$nombre','$correo','$contrasena','$cargo','$permiso')";
+    $cargo = $_POST['cargo'];   
+    $query = "INSERT INTO cargos (cargo) VALUES ('$cargo')";
     $insert = mysqli_query($conexion,$query);
     if("$insert"){
-        echo "<script>alert('Se creo el usuario correctamente'); window.location='usuarios.php';</script>";
+        echo "<script>window.location='cargos.php';</script>";
     }
 }   
 ?>
@@ -30,7 +26,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="home.php">Activos Fijos</a>
             <!-- Sidebar Toggle-->
@@ -49,7 +45,7 @@
                 </li>
             </ul>
         </nav>
-        <<div id="layoutSidenav">
+        <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
@@ -66,7 +62,7 @@
                             </a>
                             <div class="collapse" id="collapseActivos" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">                                    
-                                    <a class="nav-link" href="editarUsuario.html">Crear Activo</a>                                   
+                                    <a class="nav-link" href="crearActivo.php">Crear Activo</a>                                   
                                     <a class="nav-link" href="crearUsuario.php">Editar Activo</a>
                                 </nav>
                             </div>
@@ -74,10 +70,10 @@
                             <div class="sb-sidenav-menu-heading">configuración</div>                                                     
                             <div>
                                 <a class="nav-link" href="usuarios.php">Usuarios</a>  
-                                <a class="nav-link" href="crearUsuario.php">Dependencias</a>   
-                                <a class="nav-link" href="crearUsuario.php">Oficinas</a>   
-                                <a class="nav-link" href="crearUsuario.php">Proveedores</a>   
-                                <a class="nav-link" href="crearUsuario.php">Cargos</a>   
+                                <a class="nav-link" href="dependencias.php">Dependencias</a>   
+                                <a class="nav-link" href="oficinas.php">Oficinas</a>   
+                                <a class="nav-link" href="proveedores.php">Proveedores</a>   
+                                <a class="nav-link" href="cargos.php">Cargos</a>   
                             </div>
                             <?php } ?>  
                         </div>
@@ -87,14 +83,40 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h2 class="text-center mt-3">Crear Usuario</h2>
+                        <h2 class="text-center mt-3">Crear Cargo</h2>
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="mt-3 w-50 m-auto">
                             <label class="form-label">Nombre Cargo</label>
-                            <input class="form-control" type="text" name="nombre">                            
+                            <input class="form-control" type="text" name="cargo">                            
                             <br>
                             <input class="btn btn-primary" type="submit" value="Guardar">
                         </form>
-                    </div>  
+                    </div>
+                    <div class="card-body">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Opciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    include("conexion.php");
+				                    $sql = "SELECT * FROM cargos";
+    	                			$ejecutar = $conexion->query($sql);
+	        			            while ($filas = $ejecutar->fetch_object()){
+                					    echo "<tr>";					
+			                		    echo "<td class='text-center'>".$filas->cargo."</td>";            	    				       			                		
+	    			    	            echo "<td class='text-center'>
+    				        		            <a class='btn btn-info' href='editarCargo.php?id=".$filas->id."'>Editar</a>
+        						                <a class='btn btn-danger' href='eliminarCargo.php?id=".$filas->id."'>eliminar</a>	
+						                    </td>";
+					                    echo "</tr>";
+				                        }			
+			                        ?>                                                                               
+                                    </tbody>
+                                </table>
+                            </div>  
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">

@@ -3,6 +3,10 @@
     session_start();
     $nombre = $_SESSION['nombre'];
     $tipoPermiso = $_SESSION['permiso'];
+    $id = $_GET['id'];
+    $query = 'SELECT * FROM cargos WHERE id = '.$id.'';
+    $edit = mysqli_query($conexion,$query);
+    $row = $edit->fetch_object();    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,57 +66,54 @@
                             <div class="sb-sidenav-menu-heading">configuración</div>                                                     
                             <div>
                                 <a class="nav-link" href="usuarios.php">Usuarios</a>  
-                                <a class="nav-link" href="dependencias.php">Dependencias</a>   
-                                <a class="nav-link" href="oficinas.php">Oficinas</a>   
-                                <a class="nav-link" href="proveedores.php">Proveedores</a>   
+                                <a class="nav-link" href="crearUsuario.php">Dependencias</a>   
+                                <a class="nav-link" href="crearUsuario.php">Oficinas</a>   
+                                <a class="nav-link" href="crearUsuario.php">Proveedores</a>   
                                 <a class="nav-link" href="cargos.php">Cargos</a>   
                             </div>
-                            <?php } ?>                              
+                            <?php } ?>  
                         </div>
                     </div>                            
                 </nav>
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                <a class="btn btn-secondary" href="crearUsuario.php">Crear usuarios</a>
-                <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                DataTable Example
-                            </div>
-                            <div class="card-body">
+                    <div class="container-fluid">
+                        <h2 class="text-center mt-3">Editar Cargo</h2>
+                        <form action="editJob.php" method="post" class="mt-3 w-50 m-auto">
+                            <input class="form-control" type="hidden" name="id" value="<?php echo $row->id ?>">
+                            <label class="form-label">Nombre Cargo</label>
+                            <input class="form-control" type="text" name="cargo" value="<?php echo $row->cargo ?>">                            
+                            <br>
+                            <input class="btn btn-primary" type="submit" value="Guardar">
+                        </form>
+                    </div>
+                    <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
                                             <th>Nombre</th>
-                                            <th>Correo</th>
-                                            <th>Cargo</th>
-                                            <th>Tipo Permiso</th>
                                             <th>Opciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <?php
                                     include("conexion.php");
-				                    $sql = "SELECT * FROM usuarios";
+				                    $sql = "SELECT * FROM cargos";
     	                			$ejecutar = $conexion->query($sql);
 	        			            while ($filas = $ejecutar->fetch_object()){
                 					    echo "<tr>";					
-			                		    echo "<td class='text-center'>".$filas->nombre."</td>";
-            	    				    echo "<td class='text-center'>".$filas->correo."</td>";
-			                		    echo "<td class='text-center'>".$filas->cargo."</td>";
-            			    		    echo "<td class='text-center'>".$filas->tipoPermiso."</td>";    			                		
+			                		    echo "<td class='text-center'>".$filas->cargo."</td>";            	    				       			                		
 	    			    	            echo "<td class='text-center'>
-    				        		            <a class='btn btn-info' href='editarusuario.php?id=".$filas->id."'>Editar</a>
-        						                <a class='btn btn-danger' href='eliminarActivo.php?id=".$filas->id."'>eliminar</a>	
+    				        		            <a class='btn btn-info' href='editarcargo.php?id=".$filas->id."'>Editar</a>
+        						                <a class='btn btn-danger' href='eliminarCargo.php?id=".$filas->id."'>eliminar</a>	
 						                    </td>";
 					                    echo "</tr>";
 				                        }			
 			                        ?>                                                                               
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>                     
+                            </div>  
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">

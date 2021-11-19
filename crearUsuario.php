@@ -30,7 +30,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="home.php">Activos Fijos</a>
             <!-- Sidebar Toggle-->
@@ -44,12 +44,12 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#!">Configuración</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Cerrar Cesion</a></li>
+                        <li><a class="dropdown-item" href="cierreSesion.php">Cerrar Sesion</a></li>
                     </ul>
                 </li>
             </ul>
         </nav>
-        <<div id="layoutSidenav">
+        <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
@@ -66,7 +66,7 @@
                             </a>
                             <div class="collapse" id="collapseActivos" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">                                    
-                                    <a class="nav-link" href="editarUsuario.html">Crear Activo</a>                                   
+                                    <a class="nav-link" href="crearActivo.php">Crear Activo</a>                                   
                                     <a class="nav-link" href="crearUsuario.php">Editar Activo</a>
                                 </nav>
                             </div>
@@ -77,7 +77,7 @@
                                 <a class="nav-link" href="crearUsuario.php">Dependencias</a>   
                                 <a class="nav-link" href="crearUsuario.php">Oficinas</a>   
                                 <a class="nav-link" href="crearUsuario.php">Proveedores</a>   
-                                <a class="nav-link" href="crearUsuario.php">Cargos</a>   
+                                <a class="nav-link" href="cargos.php">Cargos</a>   
                             </div>
                             <?php } ?>  
                         </div>
@@ -96,10 +96,17 @@
                             <label class="form-label">Contraseña</label>
                             <input class="form-control" type="password" name="contrasena">
                             <label class="form-label">Cargo</label>
-                            <input class="form-control" type="text" name="cargo"> 
+                            <select class="form-select" name="cargo" id="">
+                                <?php
+                                    $sentencia = "SELECT * FROM cargos";
+                                    $lista = mysqli_query($conexion,$sentencia);                   
+                                    while ($valores = mysqli_fetch_array($lista)) {                                            
+                                        echo '<option value="'.$valores['cargo'].'">'.$valores['cargo'].'</option>';
+                                    }
+                                ?>
+                            </select>
                             <label class="form-label">Permiso</label>
                             <select class="form-select" name="permiso" id="">
-                                <option value="">Seleccione</option>
                                 <option value="Administrador">Administrador</option>
                                 <option value="Usuario">Usuario</option>
                             </select>

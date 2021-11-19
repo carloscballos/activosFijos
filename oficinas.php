@@ -3,6 +3,14 @@
     session_start();
     $nombre = $_SESSION['nombre'];
     $tipoPermiso = $_SESSION['permiso'];
+    if($_POST){
+    $oficina = $_POST['oficina'];   
+    $query = "INSERT INTO oficinas (oficina) VALUES ('$oficina')";
+    $insert = mysqli_query($conexion,$query);
+    if("$insert"){
+        echo "<script>window.location='oficinas.php';</script>";
+    }
+}   
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,52 +75,48 @@
                                 <a class="nav-link" href="proveedores.php">Proveedores</a>   
                                 <a class="nav-link" href="cargos.php">Cargos</a>   
                             </div>
-                            <?php } ?>                              
+                            <?php } ?>  
                         </div>
                     </div>                            
                 </nav>
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                <a class="btn btn-secondary" href="crearUsuario.php">Crear usuarios</a>
-                <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                DataTable Example
-                            </div>
-                            <div class="card-body">
+                    <div class="container-fluid">
+                        <h2 class="text-center mt-3">Crear Oficina</h2>
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="mt-3 w-50 m-auto">
+                            <label class="form-label">Nombre Oficina</label>
+                            <input class="form-control" type="text" name="oficina">                            
+                            <br>
+                            <input class="btn btn-primary" type="submit" value="Guardar">
+                        </form>
+                    </div>
+                    <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Nombre</th>
-                                            <th>Correo</th>
-                                            <th>Cargo</th>
-                                            <th>Tipo Permiso</th>
+                                            <th>Oficina</th>
                                             <th>Opciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <?php
                                     include("conexion.php");
-				                    $sql = "SELECT * FROM usuarios";
+				                    $sql = "SELECT * FROM oficinas";
     	                			$ejecutar = $conexion->query($sql);
 	        			            while ($filas = $ejecutar->fetch_object()){
                 					    echo "<tr>";					
-			                		    echo "<td class='text-center'>".$filas->nombre."</td>";
-            	    				    echo "<td class='text-center'>".$filas->correo."</td>";
-			                		    echo "<td class='text-center'>".$filas->cargo."</td>";
-            			    		    echo "<td class='text-center'>".$filas->tipoPermiso."</td>";    			                		
+			                		    echo "<td class='text-center'>".$filas->oficina."</td>";            	    				       			                		
 	    			    	            echo "<td class='text-center'>
-    				        		            <a class='btn btn-info' href='editarusuario.php?id=".$filas->id."'>Editar</a>
-        						                <a class='btn btn-danger' href='eliminarActivo.php?id=".$filas->id."'>eliminar</a>	
+    				        		            <a class='btn btn-info' href='editarOficina.php?id=".$filas->id."'>Editar</a>
+        						                <a class='btn btn-danger' href='eliminarOficina.php?id=".$filas->id."'>eliminar</a>	
 						                    </td>";
 					                    echo "</tr>";
 				                        }			
 			                        ?>                                                                               
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>                     
+                            </div>  
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
