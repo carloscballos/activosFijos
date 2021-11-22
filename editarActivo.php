@@ -3,24 +3,10 @@
     session_start();
     $nombre = $_SESSION['nombre'];
     $tipoPermiso = $_SESSION['permiso'];
-    if($_POST){
-    $codigo = $_POST['codigo'];   
-    $referencia = $_POST['referencia'];   
-    $serial = $_POST['serial'];   
-    $dependencia = $_POST['dependencia'];   
-    $oficina = $_POST['oficina'];   
-    $proveedor = $_POST['proveedor'];   
-    $estado = $_POST['estado'];   
-    $fCompra = $_POST['fCompra'];   
-    $fGarantia = $_POST['fGarantia'];   
-    $depreciacion = $_POST['depreciacion'];   
-    $responsable = $_POST['responsable'];   
-    $query = "INSERT INTO activos (codigo,referencia,serial,dependencia,oficina,proveedor,estado,fechaCompra,fechaGarantia,depreciacion,responsable) VALUES ('$codigo','$referencia','$serial','$dependencia','$oficina','$proveedor','$estado','$fCompra','$fGarantia','$depreciacion','$responsable')";
-    $insert = mysqli_query($conexion,$query);
-    if("$insert"){
-        echo "<script>window.location='activos.php';</script>";
-    }
-}   
+    $id = $_GET['id'];
+    $query = 'SELECT * FROM activos WHERE id = '.$id.'';
+    $edit = mysqli_query($conexion,$query);
+    $row = $edit->fetch_object();    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,11 +51,17 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Tablero
                             </a>
-                            <a class="nav-link collapsed" href="activos.php" data-bs-toggle="collapse" data-bs-target="#collapseActivos" aria-expanded="false" aria-controls="collapseLayouts">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseActivos" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Activos
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>                            
+                            </a>
+                            <div class="collapse" id="collapseActivos" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">                                    
+                                    <a class="nav-link" href="crearActivo.php">Crear Activo</a>                                   
+                                    <a class="nav-link" href="crearUsuario.php">Editar Activo</a>
+                                </nav>
+                            </div>
                             <?php if($tipoPermiso == "Administrador") {?>
                             <div class="sb-sidenav-menu-heading">configuración</div>                                                     
                             <div>
@@ -88,18 +80,18 @@
                 <main>
                     <div class="container-fluid row">
                         <h2 class="text-center mt-3">Crear Activo</h2>                        
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="mt-3 w-50 m-auto row row-cols-2">
+                        <form action="editActive.php" method="post" class="mt-3 w-50 m-auto row row-cols-2">
                             <div class="col">
                                 <label class="form-label">Codigo</label>
-                                <input class="form-control" type="text" name="codigo">
+                                <input class="form-control" type="text" name="codigo" value="<?php echo $row->codigo ?>">
                             </div>
                             <div class="col">
                                 <label class="form-label">Referencia</label>
-                                <input class="form-control" type="text " name="referencia">
+                                <input class="form-control" type="text" name="referencia" value="<?php echo $row->referencia ?>">
                             </div>
                             <div class="col">
                                 <label class="form-label">Serial</label>
-                                <input class="form-control" type="text" name="serial">
+                                <input class="form-control" type="text" name="serial" value="<?php echo $row->serial ?>">
                             </div>
                             <div class="col">
                                 <label class="form-label">Dependencia</label>
@@ -126,8 +118,10 @@
                                 </select>
                             </div>
                             <div class="col">
+                                <input class="form-control" type="hidden" name="id" value="<?php echo $row->id ?>">
                                 <label class="form-label">Proveedor</label>
                                 <select class="form-select" name="proveedor" id="">
+                                    <option value=""><?php echo $row->proveedor ?></option>
                                 <?php
                                     $sentencia = "SELECT * FROM proveedores";
                                     $lista = mysqli_query($conexion,$sentencia);                   
@@ -140,6 +134,7 @@
                             <div class="col">
                                 <label class="form-label">Estado</label>
                                 <select class="form-select" name="estado" id="">
+                                    <option value=""><?php echo $row->estado ?></option>
                                     <option value="Uso">Uso</option>
                                     <option value="Inactivo">Inactivo</option>
                                     <option value="Arrendado">Arrendado</option>
@@ -147,23 +142,20 @@
                             </div>
                             <div class="col">
                                 <label class="form-label">F. Compra</label>
-                                <input class="form-control" type="date" name="fCompra">
+                                <input class="form-control" type="date" name="fCompra" value="<?php echo $row->fechaCompra ?>">
                             </div>
                             <div class="col">
                                 <label class="form-label">F. Garantia</label>
-                                <input class="form-control" type="date" name="fGarantia">
+                                <input class="form-control" type="date" name="fGarantia" value="<?php echo $row->fechaGarantia ?>">
                             </div>
                             <div class="col">
                                 <label class="form-label">Depreciacion</label>
-                                <input class="form-control" type="number" name="depreciacion">
-                            </div>
-                            <div class="col">
-                                <label class="form-label">Cantidad</label>
-                                <input class="form-control" type="number" name="cantidad">
-                            </div>                            
+                                <input class="form-control" type="number" name="depreciacion" value="<?php echo $row->depreciacion ?>">
+                                </div>                            
                             <div class="col">
                                 <label class="form-label">Responsable</label>
                                 <select class="form-select" name="responsable" id="">
+                                    <option value=""><?php echo $row->responsable ?></option>
                                 <?php
                                     $sentencia = "SELECT * FROM responsables";
                                     $lista = mysqli_query($conexion,$sentencia);                   
